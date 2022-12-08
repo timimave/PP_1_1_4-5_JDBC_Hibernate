@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import jm.task.core.jdbc.model.User;
 
 import java.util.List;
-
+// Data Access Object
 public interface UserDao {
     void createUsersTable() throws SQLException;
 

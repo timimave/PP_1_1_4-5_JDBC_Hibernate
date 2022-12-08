@@ -17,8 +17,8 @@ public class Util {   // реализуйте настройку соедене�
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(connectionUrl, userName,
-                password);
+            connection =
+                DriverManager.getConnection(connectionUrl, userName, password);
             System.out.println("we are connected!");
         } catch (SQLException e) {
             e.printStackTrace();
