@@ -24,7 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
     static private String removeUserById = "delete from users_table where id=?";
     static private String getAllUsers = "select * from users_table";
     static private String cleanUsersTable = "truncate table users_table";
-//    static Connection connection = Util.getConnection();
+   static Connection connection;
 
 
     public UserDaoJDBCImpl() {
@@ -34,7 +34,7 @@ public class UserDaoJDBCImpl implements UserDao {
     //Каждый метод дао должен вызывать Util.getConnection(),
     // работать с Connection и закрывать его.
     public void createUsersTable() throws SQLException {
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(createUsersTable);
@@ -49,7 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
 
     public void dropUsersTable() throws SQLException {
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             PreparedStatement preparedStatement =
                 connection.prepareStatement(dropUsersTable);
@@ -66,7 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age)
         throws SQLException {
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             PreparedStatement preparedStatement =
                 connection.prepareStatement(saveUser);
@@ -88,7 +88,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) throws SQLException {
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             PreparedStatement preparedStatement =
                 connection.prepareStatement(removeUserById);
@@ -107,7 +107,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                 getAllUsers);
@@ -132,7 +132,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() throws SQLException {
-        Connection connection = Util.getConnection();
+          connection = Util.getConnection();
         try {
             PreparedStatement preparedStatement =
                 connection.prepareStatement(cleanUsersTable);
