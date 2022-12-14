@@ -15,15 +15,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
 
     public UserDaoHibernateImpl() {
+
     }
 
     @Override
     public void createUsersTable() {
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-
+              transaction = session.beginTransaction();
+              
             SQL = "CREATE TABLE IF NOT EXISTS userDB " +
-                "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+                 "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, "
                 + "name VARCHAR(45) NOT NULL, "
                 + "last_name VARCHAR(45) NOT NULL, age INT)";
 
@@ -35,13 +37,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
         } catch (HibernateException e) {
             e.printStackTrace();
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
     @Override
     public void dropUsersTable() {
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+             transaction = session.beginTransaction();
 
             SQL = "DROP TABLE IF EXISTS userDB";
 
@@ -52,13 +59,19 @@ public class UserDaoHibernateImpl implements UserDao {
 
         } catch (HibernateException e) {
             e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            
+
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+             transaction = session.beginTransaction();
             User user = new User(name, lastName, age);
 
             SQL = "INSERT INTO userDB (name, last_name, age) VALUES ('" + name + "', '" +
@@ -73,13 +86,17 @@ public class UserDaoHibernateImpl implements UserDao {
             System.out.println("User с именем – " + user.getName() + " добавлен в базу данных");
         } catch (HibernateException e) {
             e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
     @Override
     public void removeUserById(long id) {
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
 
             SQL = "DELETE FROM userDB WHERE id = " + id;
 
@@ -90,14 +107,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
         } catch (HibernateException e) {
             e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
     @Override
     public List<User> getAllUsers() {
         List userList = null;
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-
+            transaction = session.beginTransaction();
             SQL = "SELECT * FROM userDB";
             Query query = session.createSQLQuery(SQL)
                 .addEntity(User.class);
@@ -107,8 +128,12 @@ public class UserDaoHibernateImpl implements UserDao {
             for (Object user : userList) {
                 System.out.print(user.toString());
             }
+            transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
         return userList;
     }
