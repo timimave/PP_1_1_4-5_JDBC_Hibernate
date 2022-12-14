@@ -140,8 +140,9 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
+        Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
 
             SQL = "TRUNCATE TABLE userDB";
 
@@ -152,6 +153,9 @@ public class UserDaoHibernateImpl implements UserDao {
 
         } catch (HibernateException e) {
             e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 }
